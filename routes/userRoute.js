@@ -31,22 +31,30 @@ userRouter.get("/" , async (req, res)=>{
 
 
 userRouter.post( "/signup" , async(req , res)=>{
+
+       
         const { name , email , password , gender } = req.body ;
+        const user = await UserModel.find({email}) ;
 
-        try{
+        if( user ){
+            res.send( {"msg" : "user already signup Please login"} )
+        }else{
+            try{
 
-            bcrypt.hash( password , 3 , async( err , password )=>{
-                 if( err){
-                    res.send( {"msg" : err } ) ;
-                 }
-                 const data = new UserModel({name , email , password , gender}) ;
-                 await data.save() ;
-                 res.send( {"msg" : "SignUp Successfully" } ) ;
-            }) ;
-
-        }catch(err){
-            res.send( {"msg" : err } ) ;
+                bcrypt.hash( password , 3 , async( err , password )=>{
+                     if( err){
+                        res.send( {"msg" : err } ) ;
+                     }
+                     const data = new UserModel({name , email , password , gender}) ;
+                     await data.save() ;
+                     res.send( {"msg" : "SignUp Successfully" } ) ;
+                }) ;
+    
+            }catch(err){
+                res.send( {"msg" : err } ) ;
+            }
         }
+
 });
 
 
