@@ -1,10 +1,12 @@
 const express = require("express") ;
-
+const cors = require("cors") ;
 const {connection} = require("./configs/db") ;
 const {userRouter} = require("./routes/userRoute") ;
+const {exerRouter} = require("./routes/exercise") ;
 
 require("dotenv").config() ;
 const app = express() ;
+app.use(cors()) ;
 app.use(express.json()) ;
 
 app.get("/" , (req, res)=>{
@@ -12,6 +14,7 @@ app.get("/" , (req, res)=>{
 }) ;
 
 app.use("/user" , userRouter ) ;
+app.use("/exercise" , exerRouter ) ;
 
 app.listen(process.env.port , async()=>{
     try{
